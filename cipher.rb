@@ -1,20 +1,14 @@
-def caesar_cipher(string, shift_num = 1)
+def caesar_cipher(string, shift_num)
   coded_string = Array.new()
   string.split('').each do |el|
-    if ("a".."z").include?(el) || ("A".."Z").include?(el)
-      if el.to_i(36) + shift_num > 35
-        if /[[:upper:]]/.match(el)
-          coded_string.push((el.to_i(36) + shift_num - 36 + 10).to_s(36).upcase)
+    if ("a".."z").include?(el) || ("A".."Z").include?(el) || ("0".."9").include?(el)
+        if ("A".."Z").include?(el)
+          coded_string.push(((el.to_i(36) - 10 + shift_num) % 26 + 10).to_s(36).upcase)
+        elsif ("0".."9").include?(el)
+          coded_string.push(((el.to_i(36) + shift_num) % 10).to_s(36))
         else
-          coded_string.push((el.to_i(36) + shift_num - 36 + 10).to_s(36))
-        end 
-      else
-        if /[[:upper:]]/.match(el)
-          coded_string.push((el.to_i(36) + shift_num).to_s(36).upcase)
-        else
-          coded_string.push((el.to_i(36) + shift_num).to_s(36))
+          coded_string.push(((el.to_i(36) - 10 + shift_num) % 26 + 10).to_s(36))
         end
-      end
     else
       coded_string.push(el) 
     end
@@ -22,4 +16,13 @@ def caesar_cipher(string, shift_num = 1)
   puts coded_string.join
 end
 
-caesar_cipher("What a strinG!", 5)
+puts "Please enter a string you wish to code."
+string = gets.chomp
+puts "By how many positions should it be shifted right?"
+shift = gets.chomp
+while !shift.split("").all?("0".."9")
+  puts "Please input a valid number."
+  shift = gets.chomp
+end
+
+caesar_cipher(string, shift.to_i)
